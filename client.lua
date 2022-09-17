@@ -6,7 +6,7 @@ QBCore = exports['qb-core']:GetCoreObject()
 local animations = {}
 for i,v in pairs(Config.Animations) do
     table.insert(animations, {
-        text = v.value,
+        text = v.text,
         value = tostring(i)
     })
 end

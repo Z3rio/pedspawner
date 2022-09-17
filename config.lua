@@ -1,7 +1,7 @@
 Config = {}
 Config.Animations = {
     {
-        text = "No animation"
+        text = "No animation",
     },
     {
         text = "Binoculars",
