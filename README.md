@@ -1,5 +1,7 @@
 # Pedspawner
-This is pedspawner made to work with QB-Core.
+Are you tired of shitty ped spawners that barely work?
+<br>
+Look no further, this is a pedspawner made to work with QB-Core and supports basically anything that you might want to do.
 
 # Usage:
 Simply do /createped and it will bring up a menu to create a ped.
