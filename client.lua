@@ -25,6 +25,12 @@ RegisterCommand("createped", function()
                         isRequired = true
                     },
                     {
+                        text = "Weapon name",
+                        name = "weapon",
+                        type = "text",
+                        isRequired = false
+                    },
+                    {
                         text = "Vehicle model (not needed)",
                         name = "vehmodel",
                         type = "text",
@@ -112,6 +118,12 @@ RegisterCommand("createped", function()
 
                 if (inputArgs.vehmodel == nil or inputArgs.vehmodel == "") and IsPedInAnyVehicle(PlayerPedId(), false) and inputArgs.vehseat and inputArgs.vehseat ~= "" then
                     SetPedIntoVehicle(ped, GetVehiclePedIsIn(PlayerPedId()), tonumber(inputArgs.vehseat))
+                end
+
+                if inputArgs.weapon and inputArgs.weapon ~= "" then
+                    local hash = GetHashKey(string.upper(tostring(inputArgs.weapon)))
+                    GiveWeaponToPed(ped, hash, 9999, 0,0)
+                    SetCurrentPedWeapon(ped, hash, true)
                 end
 
                 table.insert(Peds, ped)
