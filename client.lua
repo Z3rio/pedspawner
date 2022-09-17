@@ -112,9 +112,16 @@ RegisterCommand("createped", function(source, commandArgs)
                     SetPedIntoVehicle(ped, GetVehiclePedIsIn(PlayerPedId()), tonumber(commandArgs[2]))
                 end
 
-                if commandArgs[3] == "binoculars" then
-                    TaskStartScenarioInPlace(ped, "WORLD_HUMAN_BINOCULARS", 0, 1)
-                    PlayAmbientSpeech1(ped, "GENERIC_CURSE_MED", "SPEECH_PARAMS_FORCE")
+                local scenario = nil
+
+                for i,v in pairs (Config.Animations) do
+                    if commandArgs[3] == v.value then
+                        scenario = v.scenario
+                    end
+                end
+
+                if scenario then
+                    TaskStartScenarioInPlace(ped, scenario, 0, 1)
                 end
 
                 if commandArgs[4] == "true" then

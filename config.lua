@@ -1,10 +1,11 @@
 Config = {}
 Config.Animations = {
     {
-        value = "No animation"
+        text = "No animation"
     },
     {
-        value = "Binoculars",
+        text = "Binoculars",
+        value = "binoculars", -- used in command
         scenario = "WORLD_HUMAN_BINOCULARS"
     }
 }
