@@ -1,4 +1,6 @@
 local Peds, Vehs, FollowPlayerPeds = {}, {}, {}
+local showIndexes = false
+local PlayerPos = vector3(0,0,0)
 QBCore = exports['qb-core']:GetCoreObject()
 
 local animations = {}
@@ -148,13 +150,17 @@ TriggerEvent('chat:addSuggestion', '/createped', "Creates a ped", {})
 
 RegisterCommand("removeped", function(source, args)
     QBCore.Functions.TriggerCallback("qb-admin:server:getrank", function(result)
-        if Peds[tonumber(args[1])] then
-            DeletePed(Peds[tonumber(args[1])])
-            Peds[tonumber(args[1])] = nil
-        end
-        if Vehs[tonumber(args[1])] then
-            DeleteEntity(Vehs[tonumber(args[1])])
-            Vehs[tonumber(args[1])] = nil
+        if result then
+            if Peds[tonumber(args[1])] then
+                DeletePed(Peds[tonumber(args[1])])
+                Peds[tonumber(args[1])] = nil
+            end
+            if Vehs[tonumber(args[1])] then
+                DeleteEntity(Vehs[tonumber(args[1])])
+                Vehs[tonumber(args[1])] = nil
+            end
+        else
+            QBCore.Functions.Notify("You dont have access to this", "error")
         end
 	end)
 end)	
@@ -167,17 +173,36 @@ TriggerEvent('chat:addSuggestion', '/removeped', "Removes a created ped", {
 
 RegisterCommand("clearpeds", function(source)
     QBCore.Functions.TriggerCallback("qb-admin:server:getrank", function(result)
-        for i,v in pairs(Peds) do
-            DeletePed(v)
+        if result then
+            for i,v in pairs(Peds) do
+                DeletePed(v)
+            end
+            for i,v in pairs(Vehs) do
+                DeleteEntity(v)
+            end
+            Vehs = {}
+            Peds = {}
+        else
+            QBCore.Functions.Notify("You dont have access to this", "error")
         end
-        for i,v in pairs(Vehs) do
-            DeleteEntity(v)
-        end
-        Vehs = {}
-        Peds = {}
 	end)
 end)	
 TriggerEvent('chat:addSuggestion', '/clearpeds', "Removes all the created ped", {})
+
+RegisterCommand("togglepedids", function()
+    if showIndexes == false then
+        QBCore.Functions.TriggerCallback("qb-admin:server:getrank", function(result)
+            if result then
+                showIndexes = true
+            else
+                QBCore.Functions.Notify("You dont have access to this", "error")
+            end
+        end)
+    else
+        showIndexes = false
+    end
+end)
+TriggerEvent('chat:addSuggestion', '/togglepedids', "Shows or hides ids for all the created ped", {})
 
 RegisterNetEvent("onResourceStop")
 AddEventHandler("onResourceStop", function(resourceName)
@@ -193,13 +218,30 @@ end)
 
 Citizen.CreateThread(function()
     while true do
+        PlayerPos = GetEntityCoords(PlayerPedId())
         if #FollowPlayerPeds ~= 0 then
-            local PlayerPos = GetEntityCoords(PlayerPedId())
             for i,ped in pairs(FollowPlayerPeds) do
                 local veh = GetVehiclePedIsIn(ped, false)
                 TaskVehicleDriveToCoord(ped, veh, PlayerPos.x,PlayerPos.y,PlayerPos.z, 20.0, 6.0, GetHashKey(veh), 1,0,10.0)
             end
         end
         Citizen.Wait(1000)
+    end
+end)
+
+Citizen.CreateThread(function()
+    while true do
+        if showIndexes then
+            for i,v in pairs(Peds) do
+                local coords = GetEntityCoords(v)
+                local dist = #(PlayerPos - coords)
+                if dist < 10 then
+                    QBCore.Functions.DrawText3D(coords.x, coords.y, coords.z, "Index: " .. tostring(i))
+                end
+            end
+            Citizen.Wait(0)
+        else
+            Citizen.Wait(500)
+        end
     end
 end)
