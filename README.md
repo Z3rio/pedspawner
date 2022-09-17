@@ -1,4 +1,5 @@
-# Pedspawner
+![Logo / Image](https://user-images.githubusercontent.com/54480523/190868919-8a37bc88-fdf3-4185-b681-f90b980d1994.png)
+
 Are you tired of shitty ped spawners that barely work?
 <br>
 Look no further, this is a pedspawner made to work with QB-Core and supports basically anything that you might want to do.
