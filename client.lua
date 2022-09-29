@@ -110,11 +110,12 @@ RegisterCommand("createped", function()
 
                 if inputArgs.followplr == "true" then
                     if inputArgs.vehmodel == nil or inputArgs.vehmodel == "" then
-                        SetPedAsGroupMember(ped, GetPedGroupIndex(PlayerPedId()))
+                        SetPedAsGroupLeader(PlayerPedId(), 1)
+                        SetPedAsGroupMember(ped, 1)
                     else
                         SetDriveTaskDrivingStyle(ped, 786468)
                         SetDriverAbility(ped, 1.0)
-                        table.insert(FollowPlayerPeds, ped)
+                        table.insert(FollowPlayerPeds, ped) 
                     end
                 end
 
